@@ -1,0 +1,29 @@
+{
+  "name": "employee-tracker",
+  "version": "1.0.0",
+  "description": "a cli interface to track employees for a client",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ChrisVulpine/employee-tracker.git"
+  },
+  "keywords": [
+    "node.js",
+    "inquirer",
+    "mysqul",
+    "cli"
+  ],
+  "author": "chrisvulpine",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ChrisVulpine/employee-tracker/issues"
+  },
+  "homepage": "https://github.com/ChrisVulpine/employee-tracker#readme",
+  "dependencies": {
+    "inquirer": "^9.2.22",
+    "mysql2": "^3.9.7"
+  }
+}
