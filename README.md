@@ -30,7 +30,7 @@ First, clone the repository to your local machine:
 
 Navigate to the project directory.
 
-Install dependencies (inquirer, myssql2, chalk, etc.):
+Install dependencies (inquirer, mysql2, chalk, etc.):
 
     
     npm install
