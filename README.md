@@ -46,11 +46,11 @@ A demo video of the application can be found here: [Demo](https://chrisvulpine.g
   ```
 Prompts will guide the user through the rest of the application. 
 
-![alt text](<Screenshot 2024-06-03 at 2.23.49 PM.png>)
+![alt text](./lib/assets/imgs/Screenshot%202024-06-03%20at%202.23.49 PM.png)
 
-![alt text](<Screenshot 2024-06-03 at 2.24.02 PM.png>)
+![alt text](./lib/assets/imgs/Screenshot%202024-06-03%20at%202.24.02 PM.png)
 
-![alt text](<Screenshot 2024-06-03 at 2.24.23 PM.png>)
+![alt text](./lib/assets/imgs/Screenshot%202024-06-03%20at%202.24.23 PM.png)
 
 
 
