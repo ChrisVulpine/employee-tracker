@@ -38,7 +38,7 @@ Install dependencies (inquirer, myssql2, chalk, etc.):
 
 Execute the SQL schema and seed data scripts using mysql provided in the `db/` directory.
   ## Usage
-A demo video of the application can be found here: 
+A demo video of the application can be found here: [Demo](https://drive.google.com/file/d/1iMSgqUCQTBBlm-y9HXZ96bWJZ6NXah-X/view)
 
   In your CLI of choice run: 
   ```
