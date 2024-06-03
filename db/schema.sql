@@ -1,8 +1,3 @@
---TODO: add links between tables (example: FOREIGN KEY (department_id) REFERENCES department(id))
-
-
-
-
 DROP DATABASE IF EXISTS employee_db;
 CREATE DATABASE employee_db;
 

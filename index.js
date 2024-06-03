@@ -1,83 +1,87 @@
 const inquirer = require('inquirer');
-// const chalk = require('chalk'); //custom colors
 const employeeDb = require('./lib/index');
-// console.log(employeeDb);
-
+const chalk = require('chalk');
 
 //================================================================================================================
-// Iquirer Menu Prompt with switches based on choices  *functions found in --> /lib/index.js
+// Iquirer Menu Prompt with cases based on choices  *functions found in --> /lib/index.js
 //================================================================================================================
 
 const questionPrompt = () => {
-
+    console.log(''); //to aesthetically space
+    console.log(chalk.yellow `---------------------`, `Welcome to Your Employee Tracker!`, chalk.yellow `------------------------`);
+    console.log(''); //to aesthetically space
     inquirer.prompt([
         {
             type: 'list',
             name: 'start-menu',
-            message: `What would you like to do? (Move up and down using the arrow keys to reveal more choices.)`,
-            choices: ['View All Employees', 'Add Employee', 'Update Employee Role', 'View All Roles', 'Add Role', 'View All Departments', 'Add Department', 'Quit'],
+            message: `What would you like to do?`,
+            choices: ['1. View All Employees', '2. Add Employee', '3. Update Employee Role', '4. View All Roles', '5. Add Role', '6. View All Departments', '7. Add Department', (chalk.red `----Quit----`)],
         },
     ]).then(async (answers) => {
-        // console.log(answers);
 
-//===============================================================================================
+//==================================== 1. View All Employees =====================================================
 
         switch (answers['start-menu']) {
-            case 'View All Employees':
+            case '1. View All Employees':
 
                 employeeDb.viewAllEmployees().then((employees) => {
                     console.table(employees);
-                });
-                break; //stops the switch function
-//===============================================================================================
-
-            case 'Add Employee':
-    
-                inquirer.prompt([
-                    {
-                        name: "firstName",
-                        message: "Please enter the employee's first name."
-                    },
-                    {
-                        name: "lastName",
-                        message: "Please enter the employee's last name."
-                    },
-                    {
-                        name: "roleId",
-                        message: "Choose the employee's role ID. 1.Manager, 2.Marketing 3. Sales",
-                        type: "list",
-                        choices: [1, 2, 3]
-                    },
-                    {
-                        name: "managerId",
-                        message: "Choose the employee's role ID. 1.Bob, 2.Laura 3. Jim",
-                        type: "list",
-                        choices: [1, 2, 3]
-                    }
-
-                ]).then((employee) => {
-                    console.table(employee);
-
-                    employeeDb.addEmployee(employee)
-
-
+                    questionPrompt();
                 });
                 break;
-//===============================================================================================
-            case 'Update Employee Role':
+
+//==================================== 2. Add Employee ===========================================================
+
+            case '2. Add Employee':
+                employeeDb.viewAllRoles().then((roles) => {
+                    const roleChoices = roles.map(role => ({
+                        name: role.title,
+                        value: role.id
+                    }));
+                    inquirer.prompt([
+                        {
+                            name: 'firstName',
+                            message: "Please enter the employee's first name:"
+                        },
+                        {
+                            name: 'lastName',
+                            message: "Please enter the employee's last name:"
+                        },
+                        {
+                            name: 'roleId',
+                            type: 'list',
+                            message: "Choose the employee's role:",
+                            choices: roleChoices
+                        },
+                        {
+                            name: 'managerId',
+                            message: "Enter the manager's ID (if any):",
+                            default: null
+                        }
+                    ]).then(employee => {
+                        employeeDb.addEmployee(employee).then(() => {
+                            questionPrompt();
+                        });
+                    });
+                });
+                break;
+
+//==================================== 3. Update Employee Role ===========================================================
+
+            case '3. Update Employee Role':
                 const employeesToUpdate = await employeeDb.viewAllEmployees();
-                console.log(employeesToUpdate);
+                // console.log(employeesToUpdate);
                 const employeeChoices = employeesToUpdate.map(employee => ({
                     name: `${employee.first_name} ${employee.last_name}`,
                     value: employee.id
                 }));
-    
+
                 const rolesToUpdate = await employeeDb.viewAllRoles();
                 const roleChoicesToUpdate = rolesToUpdate.map(role => ({
                     name: `${role.title} (${role.department})`,
                     value: role.id
                 }));
-    
+
                 const updateAnswers = await inquirer.prompt([
                     {
                         name: 'employeeId',
@@ -92,65 +96,76 @@ const questionPrompt = () => {
                         choices: roleChoicesToUpdate
                     }
                 ]);
-    
-                await employeeDb.updateEmployeeRole(updateAnswers.employeeId, updateAnswers.roleId);
-                break;
-    
-//===============================================================================================
 
-            case 'View All Roles':
+                await employeeDb.updateEmployeeRole(updateAnswers.employeeId, updateAnswers.roleId);
+                questionPrompt();
+                break;
+
+//==================================== 4. View All Roles ======================================================
+
+            case '4. View All Roles':
                 employeeDb.viewAllRoles().then((employees) => {
                     console.table(employees);
+                    questionPrompt();
                 })
                 break;
 
-//===============================================================================================
-            case 'Add Role':
-                        const departments = await employeeDb.viewAllDepartments();
-                        const departmentChoices = departments.map(department => ({
-                            name: department.name,
-                            value: department.id
-                        }));
+//==================================== 5. Add Role ===========================================================
 
-                        const roleAnswers = await inquirer.prompt([
-                            {
-                                name: 'title',
-                                message: "Please enter the role's title."
-                            },
-                            {
-                                name: 'salary',
-                                message: "Please enter the role's salary.",
-                                validate: value => !isNaN(value) ? true : 'Please enter a valid number'
-                            },
-                            {
-                                name: 'departmentId',
-                                type: 'list',
-                                message: "Choose the department for this role.",
-                                choices: departmentChoices
-                            }
-                        ]);
+            case '5. Add Role':
+                const departments = await employeeDb.viewAllDepartments();
+                const departmentChoices = departments.map(department => ({
+                    name: department.name,
+                    value: department.id
+                }));
 
-                        await employeeDb.addRole(roleAnswers);
-                        break;
+                const roleAnswers = await inquirer.prompt([
+                    {
+                        name: 'title',
+                        message: "Please enter the role's title."
+                    },
+                    {
+                        name: 'salary',
+                        message: "Please enter the role's salary.",
+                        validate: value => !isNaN(value) ? true : 'Please enter a valid number'
+                    },
+                    {
+                        name: 'departmentId',
+                        type: 'list',
+                        message: "Choose the department for this role.",
+                        choices: departmentChoices
+                    }
+                ]);
 
+                await employeeDb.addRole(roleAnswers);
+                questionPrompt();
+                break;
 
+//==================================== 6. View All Departments ===========================================================
 
-
-
-//===============================================================================================
-
-            case 'View All Departments':
+            case '6. View All Departments':
                 employeeDb.viewAllDepartments().then((employees) => {
                     console.table(employees);
+                    questionPrompt();
                 })
                 break;
 
-//===============================================================================================
+//==================================== 7. Add Department ===========================================================
 
+            case '7. Add Department':
+                inquirer.prompt([
+                    {
+                        name: 'departmentName',
+                        message: "Enter the department's name:"
+                    }
+                ]).then(({ departmentName }) => {
+                    employeeDb.addDepartment(departmentName).then(() => {
+                        questionPrompt();
+                    });
+                });
+                break;
 
-
-
-
+//==================================== Default/Quit ===========================================================
 
             default:
                 process.exitCode = 1 //common error code in cli apps 
@@ -167,7 +182,7 @@ const questionPrompt = () => {
 //================================================================================================================
 
 function init() {
-    console.log('starting cli...');
+    console.log(chalk.green `starting...`);
     questionPrompt()
 }
 
